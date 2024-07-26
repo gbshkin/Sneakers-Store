@@ -1,5 +1,7 @@
-import Card from '../components/Card';
 
+import React from 'react';
+
+import Card from '../components/Card';
 function Home({
   items,
   searchValue,
@@ -7,7 +9,30 @@ function Home({
   onChangeSearchInpur,
   onAddToFavorite,
   onAddtoCart,
+  isLoading,
+
 }) {
+
+  const renderItems = () => {
+    const filteredItems = items.filter((item) =>
+      item.title.toLowerCase().includes(searchValue.toLowerCase()),
+    );
+    return (
+      isLoading
+        ? [...Array(8)]
+        : filteredItems
+    ).map((item, id) => (
+      <Card
+        key={id}
+        onPlus={(obj) => onAddtoCart(obj)}
+        onFavorite={(obj) => onAddToFavorite(obj)}
+        {...item}
+        loading={isLoading}
+      />
+    ));
+  }
+
+
   return (
     <div className="content p-40">
       <div className="d-flex align-center mb-40 justify-between">
@@ -25,18 +50,8 @@ function Home({
           <input onChange={onChangeSearchInpur} value={searchValue} placeholder="Поиск..." />
         </div>
       </div>
-      <div className="d-flex flex-wrap">
-        {/* cards */}
-        {items
-          .filter((item) => item.title.toLowerCase().includes(searchValue))
-          .map((item, id) => (
-            <Card
-              key={item.id}
-              onPlus={(obj) => onAddtoCart(obj)}
-              onFavorite={(obj) => onAddToFavorite(obj)}
-              {...item}
-            />
-          ))}
+      <div className="d-flex flex-wrap"> {/* main cards content*/}
+        {renderItems()}
       </div>
     </div>
   );

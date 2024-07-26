@@ -4,7 +4,6 @@ function Header(props) {
   return (
     <header className="d-flex justify-between align-center p-40">
       {' '}
-      {/* header */}
       <Link to="/">
         <div className="d-flex align-center">
           <img width={40} height={40} src="/img/headLogo.png" alt="site logo" />
