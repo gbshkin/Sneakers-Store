@@ -7,6 +7,7 @@ body {
 * {
   font-family: 'Inter', system-ui;
 }
+
 .wrapper {
   background: #ffffff;
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.04);
@@ -17,6 +18,7 @@ body {
 
 header {
   border-bottom: 1px solid #eaeaea;
+
   img {
     margin-right: 15px;
   }
@@ -44,6 +46,8 @@ header {
   .greenButton {
     width: 245px;
     margin-top: 20px;
+
+
 
     &:hover {
       img {
@@ -93,6 +97,7 @@ input {
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1;
 }
+
 .drawer {
   display: flex;
   flex-direction: column;
@@ -133,8 +138,13 @@ input {
         }
       }
     }
+
     .greenButton {
       position: relative;
+      &:disabled {
+        animation: button-loading 0.7s ease-in-out infinite;
+      }
+
 
       &:hover {
         img {
@@ -151,6 +161,7 @@ input {
     }
   }
 }
+
 .greenButton {
   width: 100%;
   height: 55px;
@@ -163,6 +174,11 @@ input {
   cursor: pointer;
   transition: background-color 0.1s ease-in-out;
 
+  &:disabled {
+    background-color: #bebebe !important;
+    cursor: default;
+  }
+
   &:hover {
     background-color: #a7e25e;
   }
@@ -171,6 +187,7 @@ input {
     background-color: #92c752;
   }
 }
+
 .cartItem {
   border: 1px solid #f3f3f3;
   border-radius: 20px;
@@ -185,9 +202,11 @@ input {
     background-repeat: no-repeat;
     margin-right: 20px;
   }
+
   p {
     font-size: 16px;
   }
+
   b {
     font-size: 14px;
   }
@@ -200,5 +219,17 @@ input {
   &:hover {
     opacity: 1;
     cursor: pointer;
+  }
+}
+
+@keyframes button-loading {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 1;
   }
 }

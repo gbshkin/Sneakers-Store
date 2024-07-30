@@ -1,10 +1,10 @@
 import React from 'react';
 import ContentLoader from "react-content-loader"
 import styles from './Card.module.scss';
-import AppContext from '../../context';
+import {AppContext} from '../../context';
 
 
-function Card({
+export function Card({
   id,
   price,
   title,
@@ -79,4 +79,4 @@ function Card({
   );
 }
 
-export default Card;
+

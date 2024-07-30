@@ -1,14 +1,15 @@
 import React from 'react';
 import {Routes, Route} from 'react-router-dom';
 import axios from 'axios';
-import AppContext from './context'
-import Header from './components/Header';
-import Drawer from './components/Drawer';
-import Home from './pages/Home';
-import Favorites from './pages/Favorites';
+import {AppContext} from './context'
+import {Header} from './components/Header';
+import {Drawer} from './components/Drawer';
+import {Home} from './pages/Home';
+import {Favorites} from './pages/Favorites';
+import {Orders} from "./pages/Orders";
 
 
-function App() {
+export function App() {
     const [cartItems, setCartItems] = React.useState([]);
     const [items, setItems] = React.useState([]);
     const [searchValue, SetSearchValue] = React.useState('');
@@ -19,7 +20,10 @@ function App() {
     React.useEffect(() => {
         async function fetchData() {
             try {
-                const [cartResponse, favoritesResponse, itemsResponse] = await Promise.all([
+                const [
+                    cartResponse,
+                    favoritesResponse,
+                    itemsResponse] = await Promise.all([
                     axios.get('https://dc187ccc09a54600.mokky.dev/cart'),
                     axios.get('https://dc187ccc09a54600.mokky.dev/favorites'),
                     axios.get('https://dc187ccc09a54600.mokky.dev/items'),
@@ -47,7 +51,7 @@ function App() {
             } else {
                 const {data} = await axios.post('https://dc187ccc09a54600.mokky.dev/cart', obj);
                 setCartItems((prev) => [...prev, data]);
-                console.log((`передано в корзину`), data);
+
             }
         } catch (err) {
             console.log(err)
@@ -66,6 +70,7 @@ function App() {
         try {
             if (favorites.find((favObj) => favObj.id === obj.id)) {
                 axios.delete(`https://dc187ccc09a54600.mokky.dev/favorites/${obj.id}`);
+                setFavorites((prev) => prev.filter((item) => Number(item.id) !== Number(obj.id)));
 
             } else {
                 const {data} = await axios.post(`https://dc187ccc09a54600.mokky.dev/favorites`, obj);
@@ -75,7 +80,7 @@ function App() {
             alert('Не удалось добавить в избранное')
         }
     };
-    const onChangeSearchInpur = (event) => {
+    const onChangeSearchInput = (event) => {
         SetSearchValue(event.target.value);
     };
 
@@ -99,7 +104,9 @@ function App() {
         }}>
             <div className="wrapper clear">
                 {cartOpened ? (
-                    <Drawer onRemove={onRemoveItem} items={cartItems} onClose={() => setCartOpened(false)}/>
+                    <Drawer onRemove={onRemoveItem}
+                            items={cartItems}
+                            onClose={() => setCartOpened(false)}/>
                 ) : null}
                 <Header OnClickCart={() => setCartOpened(true)}/>
 
@@ -117,17 +124,20 @@ function App() {
                                 cartItems={cartItems}
                                 searchValue={searchValue}
                                 SetSearchValue={SetSearchValue}
-                                onChangeSearchInpur={onChangeSearchInpur}
+                                onChangeSearchInput={onChangeSearchInput}
                                 onAddToFavorite={onAddToFavorite}
                                 onAddtoCart={onAddtoCart}
                                 isLoading={isLoading}
                             />
                         }
                     />
+                    <Route
+                        path="/orders"
+                        element={
+                            <Orders />}/>
+
                 </Routes>
             </div>
         </AppContext.Provider>
     );
 }
-
-export default App;

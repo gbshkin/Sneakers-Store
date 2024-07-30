@@ -1,4 +1,34 @@
-function Drawer({onRemove, onClose, items = []}) {
+import React from "react";
+import {Info} from "./info";
+import axios from "axios";
+import {useCart} from "../hooks/useCart";
+
+
+export function Drawer({onRemove, onClose, items = []}) {
+    const {setCartItems, cartItems, tax, totalPrice} = useCart()
+    const [isOrder, setOrder] = React.useState(false);
+    const [orderId, setOrderId] = React.useState(false);
+    const [isLoading, setIsLoading] = React.useState(false);
+
+
+    const onClickOrder = async () => {
+        try {
+            setIsLoading(true);
+            const {data} = await axios.post('https://dc187ccc09a54600.mokky.dev/orders', {
+                items: cartItems
+            })
+            console.log((`передано в заказ`), data);
+            await axios.patch('https://dc187ccc09a54600.mokky.dev/cart', [])
+
+            setOrderId(data.id);
+            setOrder(true);
+            setCartItems([]);
+        } catch (error) {
+            alert('Не удалось создать заказ :(')
+        }
+        setIsLoading(false);
+
+    }
     return (
         <div className="overlay">
             <div className="drawer">
@@ -12,7 +42,7 @@ function Drawer({onRemove, onClose, items = []}) {
                 </h2>
 
                 {items.length > 0 ? (
-                    <div>
+                    <div className="d-flex flex-column flex">
                         <div className="items">
                             {items.map((obj) => (
                                 <div key={obj.title} className="cartItem d-flex align-center mb-20">
@@ -40,40 +70,28 @@ function Drawer({onRemove, onClose, items = []}) {
                                 <li>
                                     <span>Итого:</span>
                                     <div></div>
-                                    <b>21 498 руб. </b>
+                                    <b>{totalPrice} руб. </b>
                                 </li>
                                 <li>
                                     <span>Налог 5%:</span>
                                     <div></div>
-                                    <b>1074 руб. </b>
+                                    <b>{tax} руб. </b>
                                 </li>
                             </ul>
-                            <button className="greenButton">
-                                Оформить заказ
-                                <img src="/img/arrow.svg" alt="arrow"/>
+                            <button disabled={isLoading} onClick={onClickOrder}
+                                    className="greenButton">{isLoading ? 'Протираем кроссовки' :
+                                'Оформить заказ'
+                            }<img src="/img/arrow.svg" alt="arrow"/>
                             </button>
                         </div>
                     </div>
                 ) : (
-                    <div className="cartEmpty d-flex align-center justify-center flex-column flex">
-                        <img
-                            className="mb-20"
-                            width="120px"
-                            height="120px"
-                            src="/img/cartEmpty.png" 
-                            alt="empty cart logo"
-                        />
-                        <h2>Корзина пустая</h2>
-                        <p className="opacity-6">Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.</p>
-                        <button className="greenButton" onClick={onClose}>
-                            <img src="/img/arrow.svg" alt="arrow logo"/>
-                            Вернуться назад
-                        </button>
-                    </div>
+                    <Info title={isOrder ? "Заказ оформлен!" : "Корзина пустая"}
+                          description={isOrder ? `Ваш заказ #${orderId}! Курьер уже обувает ваши кроссовки` : `На кроссах дырка - зашей, заказ пустой как ваш кошель =(`}
+                          image={isOrder ? "/img/completeOrder.svg" : "/img/cartEmpty.png"}/>
                 )}
             </div>
         </div>
-    );
+    )
+        ;
 }
-
-export default Drawer;
