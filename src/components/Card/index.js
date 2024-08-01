@@ -51,11 +51,11 @@ export function Card({
       ) : (
         <>
           <div className={styles.favorite}>
-            <img
-              src={isFavorite ? './img/favoriteActive.svg' : './img/favoriteUnactive.svg'}
-              alt="unliked logo"
-              onClick={onClickFavorite}
-            />
+            {onFavorite && <img
+                src={isFavorite ? './img/favoriteActive.svg' : './img/favoriteUnactive.svg'}
+                alt="unliked logo"
+                onClick={onClickFavorite}
+            />}
           </div>
           <img width={133} height={112} src={imageUrl} alt={title} />
           <h5>{title}</h5>
@@ -64,13 +64,13 @@ export function Card({
               <span>Цена</span>
               <b>{price} руб.</b>
               </div>
-             
-              <img
+
+            {onPlus && <img
                 className={styles.plus}
                 onClick={onClickPlus}
-                src={ isItemAdded(id) ? './img/green_add.svg' : './img/plus.svg'}
+                src={isItemAdded(id) ? './img/green_add.svg' : './img/plus.svg'}
                 alt="Plus"
-              />
+            />}
             
           </div>
         </>

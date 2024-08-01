@@ -3,7 +3,7 @@ import {Routes, Route} from 'react-router-dom';
 import axios from 'axios';
 import {AppContext} from './context'
 import {Header} from './components/Header';
-import {Drawer} from './components/Drawer';
+import {Drawer} from './components/Drawer/index.js';
 import {Home} from './pages/Home';
 import {Favorites} from './pages/Favorites';
 import {Orders} from "./pages/Orders";
@@ -103,11 +103,13 @@ export function App() {
             onRemoveItem,
         }}>
             <div className="wrapper clear">
-                {cartOpened ? (
-                    <Drawer onRemove={onRemoveItem}
-                            items={cartItems}
-                            onClose={() => setCartOpened(false)}/>
-                ) : null}
+                <Drawer
+                    items={cartItems}
+                    onClose={() => setCartOpened(false)}
+                    onRemove={onRemoveItem}
+                    opened={cartOpened}
+                />
+
                 <Header OnClickCart={() => setCartOpened(true)}/>
 
                 <Routes>
@@ -118,7 +120,7 @@ export function App() {
                     <Route
                         path="/"
                         element={
-                            <Home
+                            <Home onClick={() => (setCartOpened(false))}
                                 onPlus={onAddtoCart}
                                 items={items}
                                 cartItems={cartItems}
@@ -134,7 +136,7 @@ export function App() {
                     <Route
                         path="/orders"
                         element={
-                            <Orders />}/>
+                            <Orders/>}/>
 
                 </Routes>
             </div>
