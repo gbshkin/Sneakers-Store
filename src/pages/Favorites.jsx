@@ -27,7 +27,7 @@ export function Favorites({onAddToFavorite}) {
                 <div className="d-flex flex-column align-items-center justify-content-center" style={{height: '100vh'}}>
                     <div className="text-center">
                         <img width={70} height={70} src="/img/crySmile.png" alt="site logo"/>
-                        <h3>У вас нет заказов</h3>
+                        <h3>Пусто =(</h3>
                         <p className="opacity-6">
                             Вы ничего не добавили в избранное</p>
                         <Link to="/">
